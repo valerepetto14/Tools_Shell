@@ -33,7 +33,6 @@ int main(void)
 			while (token != NULL && iter < 3) //LLENO EL ARRAY
 			{
 				argv[iter] = token;
-				printf("%s\n", token);
 				iter++;
 				token = strtok(NULL, " ");
 			}
@@ -55,6 +54,7 @@ int main(void)
 		free(cadena);
 		bytes_leidos = 0;
 		cadena = NULL;
+		argv[0] = NULL, argv[1] = NULL,argv[2] = NULL,argv[3] = NULL;
 	}
 	free(cadena);
 	return (0);
