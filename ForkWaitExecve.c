@@ -10,26 +10,31 @@ int main(void)
 {
 	pid_t pid;
 	int iter = 0;
-while (iter < 5)
-{
-	pid = fork();
-	int iter = 0;
-	if (pid == 0)
+	char *argv[] = {"/bin/ls", "-l", "./", NULL};
+	while (iter < 5)
 	{
-		
-		return (0);
+		pid = fork();
+		if (pid == 0)
+		{
+			printf("Before execve\n");
+			if (execve(argv[0], argv, NULL) == -1)
+			{
+				perror("Error:");
+				return(1);
+			}
+			printf("After execve\n");	
+		}
+		else if (pid < 0)
+		{
+			perror("anda mal");
+			return (-1);
+		}
+		else
+		{
+			wait(NULL);
+		}
+		printf("Proceso PADRE = %d\n", getpid());
+		iter++;
 	}
-	else if (pid < 0)
-	{
-		perror("anda mal");
-		return (-1);
-	}
-	else
-	{
-		wait(NULL);
-		return (1);
-	}
-	printf("Proceso PADRE = %d\n", getpid());
 	return (0);
-}
 }
