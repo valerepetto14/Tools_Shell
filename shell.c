@@ -7,36 +7,34 @@
  * main - leer una linea y printearla
  * Return: num
  **/
+int ContSpaces(char * cadena1);
+
 int main(void)
 {
 	pid_t hijo;
 	ssize_t bytes_leidos;
 	size_t numero_bytes = 0;
-	int iter = 0;
+	int iter = 0, spaces = 0;
 	char *cadena = NULL;
 	char *token;
-	char *argv[4] = {NULL, NULL, NULL, NULL};
+	char *argv[] = {NULL};
 
 	while (1)
 	{
 		iter = 0;
 		printf("#cisfun$ ");
 		bytes_leidos = getline(&cadena, &numero_bytes, stdin);
-		if (bytes_leidos == -1 || cadena == '\n')
+		if (bytes_leidos == -1 || cadena[0] == '\n')
 		{
-			continue;
-		}
-		else if (cadena[0] == '\n')
-		{
-			argv[0] = NULL, argv[1] = NULL,argv[2] = NULL, argv[3] = NULL;
-			wait(NULL);
 			continue;
 		}
 		else
 		{
 			cadena = strtok(cadena, "\n");
+			spaces = ContSpaces(cadena);
+			argv[] = calloc(spaces, sizeof(char *));
 			token = strtok(cadena, " ");
-			while (token != NULL && iter < 3) //LLENO EL ARRAY
+			while (token != NULL && iter < spaces) //LLENO EL ARRAY
 			{
 				argv[iter] = token;
 				iter++;
@@ -65,4 +63,17 @@ int main(void)
 	}
 	free(cadena);
 	return (0);
+}
+
+int ContSpaces(char * cadena1)
+{
+	int cont = 0;
+	char * token1;
+	token1 = strtok(cadena1, " ");
+	while (token1 != NULL)
+	{
+		token1 = strtok(NULL, " ");
+		cont++;
+	}
+	return (cont);
 }
