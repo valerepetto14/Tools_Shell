@@ -26,6 +26,12 @@ int main(void)
 		{
 			continue;
 		}
+		else if (cadena[0] == '\n')
+		{
+			argv[0] = NULL, argv[1] = NULL,argv[2] = NULL, argv[3] = NULL;
+			wait(NULL);
+			continue;
+		}
 		else
 		{
 			cadena = strtok(cadena, "\n");
@@ -47,6 +53,7 @@ int main(void)
 			}
 			else //ESTOY EN EL PADRE
 			{
+				argv[0] = NULL, argv[1] = NULL,argv[2] = NULL, argv[3] = NULL;
 				wait(NULL);
 				continue;
 			}
@@ -54,7 +61,7 @@ int main(void)
 		free(cadena);
 		bytes_leidos = 0;
 		cadena = NULL;
-		argv[0] = NULL, argv[1] = NULL,argv[2] = NULL,argv[3] = NULL;
+		argv[0] = NULL, argv[1] = NULL,argv[2] = NULL, argv[3] = NULL;
 	}
 	free(cadena);
 	return (0);
