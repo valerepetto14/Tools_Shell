@@ -22,7 +22,7 @@ int main(void)
 		iter = 0;
 		printf("#cisfun$ ");
 		bytes_leidos = getline(&cadena, &numero_bytes, stdin);
-		if (bytes_leidos == -1)
+		if (bytes_leidos == -1 || cadena == '\n')
 		{
 			continue;
 		}
