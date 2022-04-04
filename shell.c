@@ -38,20 +38,18 @@ int main(void)
 		bytes_leidos = getline(&cadena, &numero_bytes, stdin);
 		if (bytes_leidos == -1 || cadena[0] == '\n')
 		{
-			free(cadena);
 			continue;
 		}
 		else
 		{
 			if(cadena[0] == 'E'&& cadena[1] == 'x' && cadena[2] == 'i' && cadena[3] == 't')
 			{
-				free(cadena);
 				break;
 			}
 			copycadena = strdup(cadena);
 			cadena = strtok(cadena, "\n");
 			tokens = ContTokens(copycadena);
-			argv = malloc(sizeof(char *) * (tokens + 1));
+			argv = calloc(tokens + 1, sizeof(char*));
 			token = strtok(cadena, " ");
 			while (token != NULL && iter < tokens) //LLENO EL ARRAY
 			{
@@ -77,12 +75,13 @@ int main(void)
 			{
 				wait(NULL);
 			}
+			free(cadena);
 		}
 		bytes_leidos = 0;
 		cadena = NULL;
-		free(cadena);
 		free(argv);
 		free(copycadena);
 	}
+	free(cadena);
 	return (0);
 }
