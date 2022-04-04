@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
+#define ROJO_T     "\x1b[31m"
 /**
  * main - leer una linea y printearla
  * Return: num
@@ -34,7 +35,7 @@ int main(void)
 	while (1)
 	{
 		iter = 0;
-		printf("#cisfun$ ");
+		printf(ROJO_T "#cisfun$ ");
 		bytes_leidos = getline(&cadena, &numero_bytes, stdin);
 		if (bytes_leidos == -1 || cadena[0] == '\n')
 		{
