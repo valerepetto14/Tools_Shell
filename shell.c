@@ -7,7 +7,7 @@
  * main - leer una linea y printearla
  * Return: num
  **/
-int ContSpaces(char * cadena1)
+int ContTokens(char * cadena1)
 {
 	int cont = 0;
 	char * token1;
@@ -25,7 +25,7 @@ int main(void)
 	pid_t hijo;
 	ssize_t bytes_leidos;
 	size_t numero_bytes = 0;
-	int iter = 0, spaces = 0;
+	int iter = 0, tokens = 0;
 	char *copycadena;
 	char *cadena = NULL;
 	char *token;
@@ -39,51 +39,50 @@ int main(void)
 		if (bytes_leidos == -1 || cadena[0] == '\n')
 		{
 			free(cadena);
-			free(copycadena);
 			continue;
 		}
 		else
 		{
+			if(cadena[0] == 'E'&& cadena[1] == 'x' && cadena[2] == 'i' && cadena[3] == 't')
+			{
+				free(cadena);
+				break;
+			}
 			copycadena = strdup(cadena);
 			cadena = strtok(cadena, "\n");
-			spaces = ContSpaces(copycadena);
-			argv = malloc(sizeof(char *) * spaces);
+			tokens = ContTokens(copycadena);
+			argv = malloc(sizeof(char *) * (tokens + 1));
 			token = strtok(cadena, " ");
-			while (token != NULL && iter <= spaces) //LLENO EL ARRAY
+			while (token != NULL && iter < tokens) //LLENO EL ARRAY
 			{
 				argv[iter] = token;
 				iter++;
 				token = strtok(NULL, " ");
 			}
+			argv[tokens] = NULL;
 
 			hijo = fork();
 			if (hijo == 0) //DENTRO DEL HIJO
 			{
 				if (execve(argv[0], argv, NULL) == -1) //TRATAMOS DE EJECUTA EL COMANDO
 				{
-					perror(" ERROR");
-					free(argv);
 					free(cadena);
+					free(copycadena);
+					free(argv);
+					perror(" ERROR");
+					return (0);
 				}
 			}
 			else //ESTOY EN EL PADRE
 			{
 				wait(NULL);
-				free(copycadena);
-				free(cadena);
-				free(argv);
-				continue;
 			}
 		}
+		bytes_leidos = 0;
+		cadena = NULL;
 		free(cadena);
 		free(argv);
 		free(copycadena);
-		bytes_leidos = 0;
-		cadena = NULL;
 	}
-	free(argv);
-	free(cadena);
 	return (0);
 }
-
-
