@@ -8,6 +8,7 @@
  * Return: num
  **/
 int ContSpaces(char * cadena1);
+int;
 
 int main(void)
 {
