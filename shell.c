@@ -3,11 +3,10 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
-#define ROJO_T     "\x1b[31m"
 /**
- * main - leer una linea y printearla
- * Return: num
- **/
+ *main - leer una linea y printearla
+ *Return: num
+ */
 int ContTokens(char * cadena1)
 {
 	int cont = 0;
@@ -21,6 +20,10 @@ int ContTokens(char * cadena1)
 	return (cont);
 }
 
+/**
+ *main - simple shell
+ *Return: Always 0
+ **/
 int main(void)
 {
 	pid_t hijo;
