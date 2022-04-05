@@ -2,15 +2,32 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <signal.h>
 #include <sys/wait.h>
+#define BLANCO_T   "\x1b[37m"
+#define VERDE_T        "\x1b[32m"
+
+void variable_controlc(int boton)
+{
+boton = 1;
+}
+
+void capturar(int boton)
+{
+struct sigaction act;
+act.sa_handler = variable_controlc(boton);
+sigaction(SIGINT, &act, NULL);
+}
+
 /**
  *main - leer una linea y printearla
  *Return: num
  */
-int ContTokens(char * cadena1)
+int ContTokens(char *cadena1)
 {
 	int cont = 0;
-	char * token1;
+	char *token1;
+
 	token1 = strtok(cadena1, " ");
 	while (token1 != NULL)
 	{
@@ -26,6 +43,7 @@ int ContTokens(char * cadena1)
  **/
 int main(void)
 {
+	int boton = 0;
 	pid_t hijo;
 	ssize_t bytes_leidos;
 	size_t numero_bytes = 0;
@@ -37,7 +55,9 @@ int main(void)
 
 	while (1)
 	{
+		capturar(boton);
 		iter = 0;
+		printf(VERDE_T "$cisfun " BLANCO_T);
 		bytes_leidos = getline(&cadena, &numero_bytes, stdin);
 		if (bytes_leidos == -1 || cadena[0] == '\n')
 		{
@@ -49,6 +69,8 @@ int main(void)
 			{
 				break;
 			}
+			else if (boton == 1)
+				continue;
 			copycadena = strdup(cadena);
 			cadena = strtok(cadena, "\n");
 			tokens = ContTokens(copycadena);
