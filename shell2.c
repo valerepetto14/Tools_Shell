@@ -29,11 +29,55 @@ int ContTokens(char *cadena1)
  *main - simple shell
  *Return: Always 0
  **/
-void cargar(char *copycadena, char *cadena)
+char *find_PATH(char **env)
 {
+	char *ruta = NULL;
+	char *token;
+	char *copy;
+	const char *name = "PATH";
+	int iter = 0;
+
+	for (iter = 0; env[iter] != NULL; iter++)
+	{
+		copy = strdup(env[iter]);
+		token = strtok(copy, "=");
+	if (strcmp(token, name) == 0)
+	{
+		token = strtok(NULL, "=");
+		ruta = token;
+	}
+}
+	return (ruta);
+}
+char **cargar(char *cadena, char **array)
+{
+	int iter = 0;
 	char *copycadena = NULL;
+	int tokens = 0;
 	char *token = NULL;
-	ZZZZ
+
+	copycadena = strdup(cadena);
+	cadena = strtok(cadena, "\n");
+	tokens = ContTokens(copycadena);
+	array = calloc(tokens + 1, sizeof(char *));
+	token = strtok(cadena, " ");
+
+	while (token != NULL && iter < tokens) /*Lleno el array*/
+	{
+		array[iter] = token;
+		iter++;
+		token = strtok(NULL, " ");
+	}
+		array[tokens] = NULL;
+		free(copycadena);
+		return (array);
+}
+list_t cargar_lista(char *path)
+{
+	if(path = NULL)
+		return (NULL);
+	
+
 }
 
 int main(int argc, char *argv[], char **env)
@@ -41,12 +85,10 @@ int main(int argc, char *argv[], char **env)
 	pid_t hijo;
 	ssize_t bytes_leidos;
 	size_t numero_bytes = 0;
-	int iter = 0, tokens = 0;
-	char *copycadena, *token, **argv, *cadena = NULL;
+	char **array = NULL, *cadena = NULL;
 
 	while (1)
 	{
-		iter = 0;
 		printf(VERDE_T "$cisfun " BLANCO_T);
 		bytes_leidos = getline(&cadena, &numero_bytes, stdin);
 		if (cadena[0] == '\n')
@@ -61,29 +103,15 @@ int main(int argc, char *argv[], char **env)
 		}
 		else
 		{
-			copycadena = strdup(cadena);
-			cadena = strtok(cadena, "\n");
-			tokens = ContTokens(copycadena);
-			argv = calloc(tokens + 1, sizeof(char *));
-			token = strtok(cadena, " ");
-
-			while (token != NULL && iter < tokens) /*Lleno el array*/
-			{
-				argv[iter] = token;
-				iter++;
-				token = strtok(NULL, " ");
-			}
-			argv[tokens] = NULL;
-
+			array = cargar(cadena, array);
 			hijo = fork();
 
 			if (hijo == 0) /*Dentro del hijo*/
 			{
-				if (execve(argv[0], argv, NULL) == -1) /*Tratamos de ejecutar el comando*/
+				if (execve(array[0], array, NULL) == -1) /*Tratamos de ejecutar el comando*/
 				{
 					free(cadena);
-					free(argv);
-					free(copycadena);
+					free(array);
 					perror(" ERROR");
 					return (0);
 				}
@@ -94,8 +122,7 @@ int main(int argc, char *argv[], char **env)
 			}
 			free(cadena);
 		}
-		free(copycadena);
-		free(argv);
+		free(array);
 		bytes_leidos = 0;
 		cadena = NULL;
 	}
