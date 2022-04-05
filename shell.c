@@ -38,7 +38,6 @@ int main(void)
 	while (1)
 	{
 		iter = 0;
-		printf(ROJO_T "#cisfun$ ");
 		bytes_leidos = getline(&cadena, &numero_bytes, stdin);
 		if (bytes_leidos == -1 || cadena[0] == '\n')
 		{
